@@ -2,7 +2,6 @@
 
 /**
  * Class HttpClient
- * @package mix\client
  * @author 刘健 <coder.liu@qq.com>
  */
 class HttpClient
@@ -170,7 +169,13 @@ class HttpClient
         if (empty($data)) {
             return '';
         }
-        return http_build_query($data);
+        if (is_scalar($data)) {
+            return $data;
+        }
+        if (is_array($data) || is_object($data)) {
+            return http_build_query($data);
+        }
+        return $data;
     }
 
     // 构建请求头
