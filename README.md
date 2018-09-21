@@ -7,7 +7,7 @@
 GET 请求：
 
 ~~~php
-$http = new HttpClient([
+$httpClient = new HttpClient([
     'timeout' => 10,
     'headers' => [
         'User-Agent'       => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
@@ -17,13 +17,13 @@ $http = new HttpClient([
         'PHPSESSID' => $this->sessionId,
     ],
 ]);
-$http->get('http://www.baidu.com');
+$httpClient->get('http://www.baidu.com');
 ~~~
 
 POST 请求：
 
 ~~~php
-$http = new HttpClient([
+$httpClient = new HttpClient([
     'timeout' => 10,
     'headers' => [
         'access-token' => 'ACCESS_TOKEN',
@@ -34,13 +34,13 @@ $params = [
     'password' => '******',
 ];
 $url = 'https://api.weixin.qq.com/cgi-bin/user/info/updateremark?access_token=ACCESS_TOKEN';
-$http->post($url, $params);
+$httpClient->post($url, $params);
 ~~~
 
 自定义请求方法：
 
 ~~~php
-$http = new HttpClient([
+$httpClient = new HttpClient([
     'timeout' => 10,
     'headers' => [
         'access-token' => 'ACCESS_TOKEN',
@@ -51,23 +51,23 @@ $params = [
     'password' => '******',
 ];
 $url = 'https://api.weixin.qq.com/cgi-bin/user/info/updateremark?access_token=ACCESS_TOKEN';
-$http->request($url, 'POST', $params);
+$httpClient->request($url, 'POST', $params);
 ~~~
 
 获取请求信息：
 
 ~~~php
-$requestUrl     = $http->getRequestUrl();
-$requestMethod  = $http->getRequestMethod();
-$requestHeaders = $http->getRequestHeaders();
-$requestBody    = $http->getRequestBody();
+$requestUrl     = $httpClient->getRequestUrl();
+$requestMethod  = $httpClient->getRequestMethod();
+$requestHeaders = $httpClient->getRequestHeaders();
+$requestBody    = $httpClient->getRequestBody();
 ~~~
 
 获取响应信息：
 
 ~~~php
-$error          = $http->getError();
-$statusCode     = $http->getStatusCode();
-$headers        = $http->getHeaders();
-$body           = $http->getBody();
+$error          = $httpClient->getError();
+$statusCode     = $httpClient->getStatusCode();
+$headers        = $httpClient->getHeaders();
+$body           = $httpClient->getBody();
 ~~~
