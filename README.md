@@ -1,14 +1,13 @@
-## `Http` 类
+## `HttpClient` 类
 
-如今的后端开发中，服务器之间的交互越来越多，而交互大多采用的是 Http 的对接方式，所以我封装了一个轻量的 Http 类来处理这些需求。
-
+如今的后端开发中，服务器之间的交互越来越多，而交互大多采用的是 Http 的对接方式，所以我封装了一个轻量的 HttpClient 类来处理这些需求。
 
 ## 如何使用
 
 GET 请求：
 
 ~~~php
-$http = new \mix\client\Http([
+$http = new HttpClient([
     'timeout' => 10,
     'headers' => [
         'User-Agent'       => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
@@ -24,7 +23,7 @@ $http->get('http://www.baidu.com');
 POST 请求：
 
 ~~~php
-$http = new \mix\client\Http([
+$http = new HttpClient([
     'timeout' => 10,
     'headers' => [
         'access-token' => 'ACCESS_TOKEN',
@@ -41,7 +40,7 @@ $http->post($url, $params);
 自定义请求方法：
 
 ~~~
-$http = new \mix\client\Http([
+$http = new HttpClient([
     'timeout' => 10,
     'headers' => [
         'access-token' => 'ACCESS_TOKEN',
