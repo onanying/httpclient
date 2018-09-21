@@ -103,7 +103,7 @@ class HttpClient
         $headerSize            = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         $this->_requestUrl     = $url;
         $this->_requestMethod  = $method;
-        $this->_requestHeaders = trim(curl_getinfo($ch)['request_header']);
+        $this->_requestHeaders = trim(isset(curl_getinfo($ch)['request_header']) ? curl_getinfo($ch)['request_header'] : '');
         $this->_requestBody    = $requestBody;
         $this->_error          = curl_error($ch);
         $this->_statusCode     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
@@ -130,6 +130,9 @@ class HttpClient
     // 返回响应头
     public function getRequestHeaders()
     {
+        if (!empty($this->getError())) {
+            return $this->headers;
+        }
         return self::headersStringToArray($this->_requestHeaders);
     }
 
