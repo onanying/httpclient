@@ -40,23 +40,6 @@ $url = 'https://api.weixin.qq.com/cgi-bin/user/info/updateremark?access_token=AC
 $httpClient->request('POST', $url, $headers, $params);
 ~~~
 
-自定义请求方法：
-
-~~~php
-$httpClient = new HttpClient([
-    'timeout' => 10,
-    'headers' => [
-        'access-token' => 'ACCESS_TOKEN',
-    ],
-]);
-$params = [
-    'username' => '18600001111',
-    'password' => '******',
-];
-$url = 'https://api.weixin.qq.com/cgi-bin/user/info/updateremark?access_token=ACCESS_TOKEN';
-$httpClient->request($url, 'POST', $params);
-~~~
-
 获取请求信息：
 
 ~~~php
