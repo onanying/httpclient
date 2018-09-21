@@ -39,7 +39,7 @@ $http->post($url, $params);
 
 自定义请求方法：
 
-~~~
+~~~php
 $http = new HttpClient([
     'timeout' => 10,
     'headers' => [
