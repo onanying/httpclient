@@ -11,10 +11,10 @@ class HttpClient
     public $timeout;
 
     // 请求头
-    public $headers;
+    public $headers = [];
 
     // cookies
-    public $cookies;
+    public $cookies = [];
 
     // 请求 URL
     protected $_requestUrl;
@@ -29,16 +29,16 @@ class HttpClient
     protected $_requestBody;
 
     // 响应头
-    protected $_headers;
+    protected $_responseHeaders;
 
     // 响应包体
-    protected $_body;
+    protected $_responseBody;
 
-    // Http状态码
-    protected $_statusCode;
+    // 响应Http状态码
+    protected $_responseStatusCode;
 
-    // 错误信息
-    protected $_error;
+    // 响应错误信息
+    protected $_responseError;
 
     // 构造
     public function __construct($config = [])
@@ -61,23 +61,11 @@ class HttpClient
         $this->cookies[$key] = $value;
     }
 
-    // GET 请求
-    public function get($url)
-    {
-        return $this->execute($url, 'GET');
-    }
-
-    // POST 请求
-    public function post($url, $body)
-    {
-        return $this->execute($url, 'POST', $body);
-    }
-
     // 执行请求
-    public function execute($url, $method, $body = null)
+    public function request($method, $url, $headers = [], $body = null)
     {
         // 构建请求参数
-        $requestHeaders = self::buildRequestHeaders($this->headers);
+        $requestHeaders = self::buildRequestHeaders($headers + $this->headers);
         $requestCookies = self::buildRequestCookies($this->cookies);
         $requestBody    = self::buildRequestBody($body);
         // 构造请求
@@ -100,19 +88,19 @@ class HttpClient
         // 执行请求
         $response = curl_exec($ch);
         // 获取响应数据
-        $headerSize            = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
-        $this->_requestUrl     = $url;
-        $this->_requestMethod  = $method;
-        $this->_requestHeaders = trim(isset(curl_getinfo($ch)['request_header']) ? curl_getinfo($ch)['request_header'] : '');
-        $this->_requestBody    = $requestBody;
-        $this->_error          = curl_error($ch);
-        $this->_statusCode     = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $this->_headers        = trim(substr($response, 0, $headerSize));
-        $this->_body           = substr($response, $headerSize);
+        $headerSize                = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $this->_requestUrl         = $url;
+        $this->_requestMethod      = $method;
+        $this->_requestHeaders     = isset(curl_getinfo($ch)['request_header']) ? trim(curl_getinfo($ch)['request_header']) : ($headers + $this->headers);
+        $this->_requestBody        = $requestBody;
+        $this->_responseError      = curl_error($ch);
+        $this->_responseStatusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $this->_responseHeaders    = trim(substr($response, 0, $headerSize));
+        $this->_responseBody       = substr($response, $headerSize);
         // 关闭请求
         curl_close($ch);
         // 返回
-        return empty($this->_error) ? true : false;
+        return empty($this->_responseError) ? true : false;
     }
 
     // 返回请求 URL
@@ -130,8 +118,8 @@ class HttpClient
     // 返回响应头
     public function getRequestHeaders()
     {
-        if (!empty($this->getError())) {
-            return $this->headers;
+        if (is_array($this->_requestHeaders)) {
+            return $this->_requestHeaders;
         }
         return self::headersStringToArray($this->_requestHeaders);
     }
@@ -143,27 +131,27 @@ class HttpClient
     }
 
     // 返回响应头
-    public function getHeaders()
+    public function getResponseHeaders()
     {
-        return self::headersStringToArray($this->_headers);
+        return self::headersStringToArray($this->_responseHeaders);
     }
 
     // 返回响应包体
-    public function getBody()
+    public function getResponseBody()
     {
-        return $this->_body;
+        return $this->_responseBody;
     }
 
     // 返回Http状态码
-    public function getStatusCode()
+    public function getResponseStatusCode()
     {
-        return $this->_statusCode;
+        return $this->_responseStatusCode;
     }
 
     // 返回错误信息
-    public function getError()
+    public function getResponseError()
     {
-        return $this->_error;
+        return $this->_responseError;
     }
 
     // 构建请求正文

@@ -17,7 +17,7 @@ $httpClient = new HttpClient([
         'PHPSESSID' => $this->sessionId,
     ],
 ]);
-$httpClient->get('http://www.baidu.com');
+$httpClient->request('GET', 'http://www.baidu.com');
 ~~~
 
 POST 请求：
@@ -29,12 +29,15 @@ $httpClient = new HttpClient([
         'access-token' => 'ACCESS_TOKEN',
     ],
 ]);
+$headers = [
+    'User-Agent'       => 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36',
+];
 $params = [
     'username' => '18600001111',
     'password' => '******',
 ];
 $url = 'https://api.weixin.qq.com/cgi-bin/user/info/updateremark?access_token=ACCESS_TOKEN';
-$httpClient->post($url, $params);
+$httpClient->request('POST', $url, $headers, $params);
 ~~~
 
 自定义请求方法：
@@ -66,8 +69,8 @@ $requestBody    = $httpClient->getRequestBody();
 获取响应信息：
 
 ~~~php
-$error          = $httpClient->getError();
-$statusCode     = $httpClient->getStatusCode();
-$headers        = $httpClient->getHeaders();
-$body           = $httpClient->getBody();
+$error          = $httpClient->getResponseError();
+$statusCode     = $httpClient->getResponseStatusCode();
+$headers        = $httpClient->getResponseHeaders();
+$body           = $httpClient->getResponseBody();
 ~~~
